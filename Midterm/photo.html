@@ -8,7 +8,6 @@
   </head>
 
   <body class="inner-page">
-    <!-- LEFT COLUMN: logo (home). Stays in view while you scroll. -->
     <aside class="side">
       <a class="logo" href="index.html" aria-label="Azelin Chen, home"><img src="img/thebestazelin.svg" alt="" /></a>
     </aside>
@@ -45,8 +44,6 @@
 
       <main class="pieces">
         <h1 class="visually-hidden">Photo</h1>
-
-        <!-- THE GALLERY: click a photo to see it large -->
         <div class="gallery" id="gallery">
           <a class="gallery-item" href="#photo-1"><img src="img/photo/PortPhoto1.JPG" alt="Photo 1" /></a>
           <a class="gallery-item" href="#photo-2"><img src="img/photo/cdmx.JPG" alt="Photo 2" /></a>
@@ -57,8 +54,7 @@
       </main>
     </div>
 
-    <!-- ENLARGED VIEWS: one per photo. The id (photo-1, photo-2...) matches the links on the home page,
-         so clicking a photo on the home page opens it large here. Click anywhere to close. -->
+    <!--lightbox -->
     <a class="lightbox" id="photo-1" href="#gallery" aria-label="Close photo">
       <span class="lightbox-x" aria-hidden="true">&times;</span>
       <img src="img/photo/PortPhoto1.JPG" alt="Photo 1" />

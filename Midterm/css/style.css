@@ -1,4 +1,4 @@
-/* Global Styles First */
+/* Global styles first */
 
 * {
   box-sizing: border-box;
@@ -15,7 +15,6 @@ img {
   height: auto;
 }
 
-/* NAV */
 nav {
   position: sticky;
   top: 0;
@@ -49,7 +48,7 @@ nav a:hover {
   color: #cf5f94;
 }
 
-/* SUBNAV */
+/* sub nav */
 nav li ul {
   display: none;
   position: absolute;
@@ -71,7 +70,7 @@ nav li li {
   position: static;      
 }
 
-/* The text of each dropdown item (small, white on the black box) */
+
 nav li li a {
   display: block;
   color: white;
@@ -103,7 +102,7 @@ nav li li a:focus-visible .preview {
   visibility: visible;
 }
 
-/* Touch screens can't hover, so skip previews on phones */
+
 @media screen and (width < 768px) {
   .preview {
     display: none;
@@ -148,14 +147,9 @@ a.info {
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  /* The transition gets defined on the RESTING STATE */
   transition: all 1s ease;
-  /*
-  transition:
-    color 1s ease,
-    background-color 1s ease;
-  }
-  */
+  
+
 }
 
 button:hover,
@@ -164,7 +158,7 @@ a.info:hover {
   color: #333;
 }
 
-/* ANCHOR LINKS + SECTIONS */
+
 html {
   scroll-behavior: smooth;
 }
@@ -202,7 +196,7 @@ section {
   grid-template-columns: 16rem minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas:
-    "info  nav"
+    "nav   nav"
     "info  vertical"
     "horiz horiz";
   row-gap: 1rem;
@@ -216,14 +210,30 @@ section {
 
 .home-page nav > ul,
 .inner-page nav > ul {
-  justify-content: flex-start;
-  gap: 3.5rem;
+  justify-content: space-evenly;
+  gap: 1.5rem;
   padding: 1rem 1.5rem 0;
 }
 
 .home-page nav > ul > li > a,
 .inner-page nav > ul > li > a {
   font-size: 2rem;
+}
+
+
+.home-page nav > ul {
+  justify-content: flex-start;
+  align-items: baseline;
+  padding-left: 0;
+}
+
+.nav-name {
+  flex: 0 0 16rem;
+  text-align: center;
+}
+
+.home-page nav > ul > li:not(.nav-name) {
+  margin-inline: auto;
 }
 
 
@@ -248,24 +258,30 @@ section {
 
 .home-info .logo img {
   display: block;
+  position: relative;
+  z-index: 2;
   height: 25rem;
   width: auto;
-  transition: opacity 0.25s ease;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   margin-top: -5rem;
   margin-bottom: -7rem; 
 }
 
 .home-info .logo:hover img {
   transform: scale(1.25);
-  position: relative;
-  z-index: 2;
 }
+
 
 .home-title {
   margin: 0;
-  font-size: 1.75rem;
+  padding-left: 0.2em;
+  font-size: 1.3rem;
+  font-weight: 700;
   line-height: 1.1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: black;
+  cursor: default;
 }
 
 .about-link {
@@ -307,14 +323,13 @@ section {
   grid-area: horiz;
 }
 
-/* Lift the hovered row above the other row so enlarged art isn't covered */
+
 .marquee:hover {
   position: relative;
   z-index: 5;
 }
 
-/* Each row holds two identical groups. Each group is at least as wide as the row,
-   so the loop never shows a gap, however many pieces you list. */
+
 .marquee-group {
   display: flex;
   flex: 0 0 auto;
@@ -323,13 +338,13 @@ section {
   animation: marquee-left 30s linear infinite;
 }
 
-/* Vertical art scrolls left; horizontal art scrolls the opposite way (right) */
+
 .marquee-horizontal .marquee-group {
   animation-direction: reverse;
   animation-duration: 30s;
 }
 
-/* Hovering does NOT pause. Only keyboard users tabbing through get a pause. */
+
 .marquee:focus-within .marquee-group {
   animation-play-state: paused;
 }
@@ -381,9 +396,6 @@ section {
   }
 }
 
-/* INNER PAGES (Design, Photo, Video, Choreo, About)
-     [ logo + list of pieces ] [ nav                 ]
-     [ logo + list of pieces ] [ big pieces, titles  ]    */
 .inner-page {
   --accent: #cf5f94;
   display: grid;
@@ -395,12 +407,12 @@ section {
   min-width: 0;
 }
 
-/* The section you are in is shown in pink in the nav */
+
 .inner-page nav a[aria-current="page"]:not(:hover) {
   color: var(--accent);
 }
 
-/* Left column: logo (links home) with the list of pieces under it. Stays in view. */
+
 .side {
   position: sticky;
   top: 0;
@@ -418,18 +430,26 @@ section {
   line-height: 0;
 }
 
-/* Same blank-space trimming as the home page logo, scaled down */
+
 .side .logo img {
   display: block;
   height: 18rem;
   width: auto;
   margin-top: -4rem;
   margin-bottom: -4rem;
-  transition: opacity 0.25s ease;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);   
 }
 
 .side .logo:hover img {
-  scale: 1.05;
+  transform: scale(1.05);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .home-info .logo img,
+  .side .logo img {
+    transition: none;
+  }
 }
 
 .side-list {
@@ -474,7 +494,7 @@ section {
   max-height: 80vh;
 }
 
-/* Videos on the video page: full width of the column, never taller than the screen */
+
 .piece video {
   display: block;
   width: 100%;
@@ -498,7 +518,7 @@ section {
   margin: 0;
 }
 
-/* PHOTO GALLERY: photos keep their own shape and flow into columns */
+
 .gallery {
   columns: 2 15rem;  
   column-gap: 0.3rem;
@@ -521,7 +541,7 @@ section {
   opacity: 0.8;
 }
 
-/* Click a photo to see it large (no JavaScript: the photo's id is the link target) */
+
 .lightbox {
   display: none;
   position: fixed;
@@ -553,7 +573,7 @@ section {
   color: black;
 }
 
-/* Responsive 16:9 video embed (YouTube, Vimeo) */
+
 .embed {
   aspect-ratio: 16 / 9;
   background: #d6709f;
@@ -566,7 +586,7 @@ section {
   border: 0;
 }
 
-/* Heading that screen readers and search engines see, but visitors don't */
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -579,7 +599,7 @@ section {
   border: 0;
 }
 
-/* GALLERY */
+
 .container {
   width: 100%;
   display: flex;
@@ -589,7 +609,6 @@ section {
 }
 
 .thumb {
-  /* flex-grow: 0, flex-shrink: 0, flex-basis (width) */
   flex: 0 0 30%;
   margin: 1.5rem auto;
   position: relative;
@@ -597,13 +616,12 @@ section {
 }
 
 .mask {
-  /* pin all 4 edges to the parents edges */
+  
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  /* center the content on both axis */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -625,9 +643,8 @@ section {
   opacity: 1;
 }
 
-/* define the img resting state explicitly so that we have properties to change */
+
 .thumb img {
-  /* these look like they normally would, but we need to define the transforms starting state so we have something to animate from */
   transform: scale(1) rotate(0);
 
   transition: all 1s ease;
@@ -650,21 +667,6 @@ section {
 .thumb:hover .mask a {
   opacity: 1;
   transform: scale(1);
-}
-
-/* Media Queries (conditional statements that apply style overrides */
-/* Desktop First styles = default style sheet is for large screens, override big => small */
-
-/* Tablet */
-@media screen and (width <= 1024px) {
-  .hero article {
-    width: 80%;
-    bottom: 10%;
-  }
-
-  .thumb {
-    flex-basis: 45%;
-  }
 }
 
 /* Phone */
@@ -690,7 +692,7 @@ section {
   }
 }
 
-/* Phone: inner pages stack (logo + list, nav, pieces) */
+
 @media screen and (width < 768px) {
   .inner-page {
     grid-template-columns: minmax(0, 1fr);
@@ -726,16 +728,24 @@ section {
   }
 }
 
-/* Phone: home page stacks (info, nav, vertical art, horizontal art) */
+
 @media screen and (width < 768px) {
   .home-page {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
-      "info"
       "nav"
+      "info"
       "vertical"
       "horiz";
+  }
+
+  .nav-name {
+    flex: 0 1 auto;
+  }
+
+  .home-page nav > ul > li:not(.nav-name) {
+    margin-inline: 0;
   }
 
   .home-info {
@@ -753,7 +763,7 @@ section {
 
   .home-title,
   .about-link {
-    font-size: 1.25rem;
+    font-size: 1.55rem;
   }
 
   .collab {

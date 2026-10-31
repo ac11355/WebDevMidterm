@@ -8,15 +8,13 @@
   </head>
 
   <body class="home-page">
-    <!-- PROTECTED INFO BOX: the scrolling art can never cover this -->
     <header class="home-info">
-      <h1 class="home-title">Azelin Chen</h1>
       <a class="logo" href="index.html" aria-label="Azelin Chen, home"><img src="img/thebestazelin.svg" alt="" /></a>
-      <a class="about-link" href="about.html">About</a>
     </header>
 
     <nav>
       <ul>
+        <li class="nav-name"><h1 class="home-title">Azelin Chen</h1></li>
         <li><a href="design.html">Design</a>
           <ul>
             <li><a href="design.html#马到成功 一马当先 “Succeed in Year of the Horse” [2025]">马到成功 一马当先 “Succeed in Year of the Horse” [2025]<img class="preview" src="img/design/BLURREDcalendar2026 .png" alt="" /></a></li>
@@ -28,9 +26,9 @@
         </li>
         <li><a href="video.html">Video</a>
           <ul>
-            <li><a href="video.html#video-1">No One Noticed Music Video<video class="preview" src="https://drive.google.com/file/d/1f566q2Q-w0wo50VBKDVV22nPaCnPaEsJ/view?usp=drive_link" preload="metadata" muted playsinline aria-hidden="true"></video></a></li>
-            <li><a href="video.html#video-2">Video 2</a></li>
-            <li><a href="video.html#video-3">Video 3</a></li>
+            <a href="video.html#video-1">No One Noticed Music Video<video class="preview" src="https://drive.google.com/file/d/1f566q2Q-w0wo50VBKDVV22nPaCnPaEsJ/view?usp=drive_link" preload="metadata" muted playsinline aria-hidden="true"></video></a></li>
+            <!-- <li><a href="video.html#video-2">Video 2</a></li>
+            <li><a href="video.html#video-3">Video 3</a></li>  -->
           </ul>
         </li>
         <li><a href="photo.html">Photo</a></li>
@@ -43,8 +41,7 @@
         </li>
       </ul>
     </nav>
-
-    <!-- VERTICAL (portrait) ART: scrolls left, stays clipped inside its own area -->
+    <!-- vertical -->
     <div class="marquee marquee-vertical" aria-label="Featured vertical work">
       <div class="marquee-group">
         <a href="design.html#马到成功 一马当先 “Succeed in Year of the Horse” [2025]"><img src="img/design/BLURREDcalendar2026 .png" alt="Design 1" /></a>
@@ -55,7 +52,7 @@
         <a href="design.html#design-6"><img src="img/design/Cover.png" alt="Design 6" /></a>
         <a href="photo.html"><img src="img/photo/IMG_4963.jpg" alt="Design 7" /></a>
       </div>
-      <!-- Copy of the group above so the loop never has a gap (keep it identical) -->
+      <!-- Copy -->
       <div class="marquee-group dup" aria-hidden="true">
         <a href="design.html#马到成功 一马当先 “Succeed in Year of the Horse” [2025]" tabindex="-1"><img src="img/design/BLURREDcalendar2026 .png" alt="" /></a>
         <a href="design.html#COMEEAT" tabindex="-1"><img src="img/design/11_25_25IDMCommMeal.png" alt="" /></a>
@@ -67,7 +64,7 @@
       </div>
     </div>
 
-    <!-- HORIZONTAL (landscape) ART: scrolls right, full width -->
+    <!-- horizontal -->
     <div class="marquee marquee-horizontal" aria-label="Featured horizontal work">
       <div class="marquee-group">
         <a href="design.html#Manchild"><img src="img/design/Manchild.png" alt="Design 2" /></a>
@@ -81,7 +78,7 @@
           </video>
         </a>
       </div>
-      <!-- Copy of the group above so the loop never has a gap (keep it identical) -->
+      <!-- Copy -->
       <div class="marquee-group dup" aria-hidden="true">
         <a href="design.html#Manchild" tabindex="-1"><img src="img/design/Manchild.png" alt="" /></a>
         <a href="photo.html#photo-1" tabindex="-1"><img src="img/photo/PortPhoto1.JPG" alt="" /></a>
