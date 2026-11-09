@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Pie Generator</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <article class="card">
+      <header class="top">
+        <p class="kicker" id="kicker"></p>
+        <h1 class="name" id="name"></h1>
+        <p class="sub" id="sub"></p>
+      </header>
+
+      <p class="status" id="status"></p>
+
+      <section class="block">
+        <h2>The sums</h2>
+        <p class="line" id="size-line"></p>
+        <p class="line" id="cost-line"></p>
+        <p class="line" id="crust-line"></p>
+        <p class="line" id="topping-line"></p>
+        <p class="line budget" id="budget-line"></p>
+
+        <p class="total">
+          <span>Total cost</span>
+          <strong id="total"></strong>
+        </p>
+        <p class="fine-print" id="fine-print"></p>
+      </section>
+
+      <section class="controls">
+        <div class="qty">
+          <span class="qty-label">Guests</span>
+          <button id="minus" type="button" aria-label="One fewer guest">−</button>
+          <span class="count" id="count"></span>
+          <button id="plus" type="button" aria-label="One more guest">+</button>
+        </div>
+
+        <div class="field">
+          <label for="who">Who is it for?</label>
+          <input id="who" type="text" placeholder="Type a name" />
+        </div>
+
+        <button class="roll" id="roll" type="button">Bake a different pie</button>
+      </section>
+
+      <section class="block steps-wrap">
+        <h2>Method</h2>
+        <ul class="steps" id="steps"></ul>
+        <p class="tagline" id="tagline"></p>
+      </section>
+    </article>
+
+    <script>
+   
+
+      const crusts = [
+        'all-butter shortcrust',
+        'graham cracker crust',
+        'lard crust',
+        'chocolate cookie crust',
+        'oat and almond crust',
+      ]
+
+      const fillings = [
+        'Sour cherry',
+        'Brown butter apple',
+        'Pumpkin',
+        'Key lime',
+        'Blueberry lemon',
+        'Pecan',
+        'Peach and ginger',
+        'Chocolate silk',
+      ]
+
+      const toppings = [
+        'a lattice top',
+        'whipped cream',
+        'toasted meringue',
+        'a crumble topping',
+      ]
+
+      const accents = ['#b3263e', '#2f6f4e', '#3b4c9c', '#a8541f', '#6b3f7a', '#1f7a8c']
+
+      const taglines = [
+        'Best served warm, with something cold.',
+        'Rest it for an hour. Really.',
+        'Nobody ever regretted a second slice.',
+        'Blind bake the crust first.',
+        'Leftovers are breakfast.',
+        'Cut it with a hot knife.',
+        'Sugar is cheaper than regret.',
+      ]
+
+      /* ---------- HELPERS ---------- */
+
+      function pickRandom(list) {
+        const index = Math.floor(Math.random() * list.length)
+        return list[index]
+      }
+
+      function randomBetween(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min
+      }
+
+
+      let filling
+      let crust
+      let topping
+      let pieInches
+      let costPerInch
+      let crustCost
+      let toppingCost
+      let prepMinutes
+      let bakeMinutes
+      let budget
+      let tagline
+      let accent
+
+      let guests = 6
+      let eaterName = ''
+
+     
+      const MIN_GUESTS = 1
+      const MAX_GUESTS = 20
+
+  
+
+      function rollNewPie() {
+        filling = pickRandom(fillings)
+        crust = pickRandom(crusts)
+        topping = pickRandom(toppings)
+
+        pieInches = randomBetween(8, 12)
+        prepMinutes = randomBetween(15, 60)
+        bakeMinutes = randomBetween(25, 75)
+        budget = randomBetween(15, 60)
+
+        costPerInch = randomBetween(5, 10) / 10 // $0.50 - $1.00
+        crustCost = randomBetween(2, 4) + 0.5
+        toppingCost = randomBetween(1, 3) + 0.75
+
+        tagline = pickRandom(taglines)
+        accent = pickRandom(accents)
+      }
+
+      
+
+      function render() {
+
+        const slicesPerPie = pieInches >= 10 ? 10 : 8
+
+        const piesNeeded = Math.ceil(guests / slicesPerPie)
+
+        const fillingCost = pieInches * costPerInch
+        const costPerPie = fillingCost + crustCost + toppingCost
+        const totalCost = costPerPie * piesNeeded
+        const costPerPerson = totalCost / guests
+        const budgetUsed = Math.round((totalCost / budget) * 100)
+        const totalMinutes = prepMinutes + bakeMinutes
+        const hoursPart = Math.floor(totalMinutes / 60)
+        const minutesPart = totalMinutes % 60
+
+        const isOverBudget = totalCost > budget
+        const isLongBake = totalMinutes > 100
+
+        const gap = Math.abs(budget - totalCost)
+
+        let status
+
+        if (isLongBake) {
+          status = 'Long bake: start first thing in the morning'
+        } else if (totalMinutes > 70) {
+          status = 'An afternoon project'
+        } else {
+          status = 'Quick one: ready before dinner'
+        }
+
+        // ternaries for values
+        const budgetLine = isOverBudget
+          ? `Over budget by $${gap.toFixed(2)}`
+          : `Under budget by $${gap.toFixed(2)}`
+
+        const pieWord = piesNeeded === 1 ? 'pie' : 'pies'
+        const kicker = eaterName === '' ? '' : `Made for ${eaterName}`
+
+        const sub = `${piesNeeded} ${pieWord} at ${pieInches} inches, for ${guests} guests, ready in ${hoursPart}h ${minutesPart}m`
+
+        const finePrint = `$${costPerPerson.toFixed(2)} per person · ${budgetUsed}% of your $${budget} budget · ${slicesPerPie} slices per pie`
+
+        // for loop: the method list
+        const steps = [
+          `Make the ${crust} and chill it`,
+          `Mix the ${filling.toLowerCase()} filling`,
+          `Bake for ${bakeMinutes} minutes`,
+          `Finish with ${topping}`,
+        ]
+
+        let stepsHTML = ''
+
+        for (let i = 0; i < steps.length; i++) {
+          const stripe = i % 2 === 0 ? 'stripe' : ''
+          const isOvenStep = i % 3 === 2
+          const label = isOvenStep ? `<span class="oven">oven</span>` : ''
+
+          stepsHTML += `<li class="${stripe}"><span class="num">${i + 1}</span>${steps[i]}${label}</li>`
+        }
+
+        // ---- put it on the page ----
+        document.querySelector('#kicker').textContent = kicker
+        document.querySelector('#name').textContent = `${filling} pie`
+        document.querySelector('#sub').textContent = sub
+        document.querySelector('#status').textContent = status
+
+        document.querySelector('#size-line').textContent =
+          `${piesNeeded} × ${pieInches}" ${pieWord}`
+        document.querySelector('#cost-line').textContent =
+          `Filling: ${pieInches}" × $${costPerInch.toFixed(2)}  —  $${fillingCost.toFixed(2)}`
+        document.querySelector('#crust-line').textContent =
+          `Crust  —  $${crustCost.toFixed(2)}`
+        document.querySelector('#topping-line').textContent =
+          `Topping  —  $${toppingCost.toFixed(2)}`
+        document.querySelector('#budget-line').textContent = budgetLine
+        document.querySelector('#budget-line').classList.toggle('over', isOverBudget)
+
+        document.querySelector('#total').textContent = `$${totalCost.toFixed(2)}`
+        document.querySelector('#fine-print').textContent = finePrint
+        document.querySelector('#count').textContent = guests
+        document.querySelector('#steps').innerHTML = stepsHTML
+        document.querySelector('#tagline').textContent = tagline
+
+        document.body.style.setProperty('--accent', accent)
+
+        document.querySelector('#minus').disabled = guests === MIN_GUESTS
+        document.querySelector('#plus').disabled = guests === MAX_GUESTS
+      }
+
+     
+
+      function handlePlus() {
+        if (guests < MAX_GUESTS) {
+          guests = guests + 1
+          render()
+        }
+      }
+
+      function handleMinus() {
+        if (guests > MIN_GUESTS) {
+          guests = guests - 1
+          render()
+        }
+      }
+
+      function handleName(event) {
+        eaterName = event.target.value.trim()
+        render()
+      }
+
+      function handleRoll() {
+        rollNewPie()
+        render()
+      }
+
+      document.querySelector('#plus').addEventListener('click', handlePlus)
+      document.querySelector('#minus').addEventListener('click', handleMinus)
+      document.querySelector('#who').addEventListener('input', handleName)
+      document.querySelector('#roll').addEventListener('click', handleRoll)
+
+      /* ---------- GO ---------- */
+
+      rollNewPie()
+      render()
+    </script>
+  </body>
+</html>
