@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JS Objects: deep dive</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, "Segoe UI", Helvetica, sans-serif;
+        max-width: 42rem;
+        margin: 3rem auto;
+        padding: 0 1.5rem;
+        line-height: 1.6;
+        color: #16191f;
+      }
+      h1 {
+        font-size: 1.4rem;
+        border-bottom: 4px solid #16191f;
+        padding-bottom: 0.5rem;
+      }
+      code {
+        background: #eef2f7;
+        padding: 0.1rem 0.3rem;
+        border-radius: 3px;
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+      }
+      #output {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 4px solid #16191f;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Open the Console</h1>
+
+    <p>
+      Most of this lesson prints to the console, not to the page. Press
+      <code>Cmd + Option + J</code> on a Mac or <code>F12</code> on Windows,
+      then click the Console tab.
+    </p>
+
+    <p>Save in VS Code, then refresh here to re-run the script.</p>
+
+    <!-- Section 9 asks you to put an object on the page. These three are here
+         for that. Give them content with querySelector and textContent. -->
+    <div id="output">
+      <h2 id="line-one"></h2>
+      <p id="line-two"></p>
+      <p id="line-three"></p>
+    </div>
+
+    <script>
+      // Section 2: your first object.
+      
+      const me = {
+        name: 'Azelin',
+        lives: 'Brooklyn',
+        classes: 4,
+        hasEaten: false,
+        foods: ['dumplings', 'pasta', 'mango'],
+      }
+
+      console.log(me)
+
+
+      // Section 3: reading values, two ways
+      console.log(me.name) 
+      console.log(me['lives']) 
+
+      let key = 'name'
+      console.log(me[key])
+      key = 'classes' 
+      console.log(me[key])
+
+      console.log(me.favouriteColour)
+      // Section 4: changing an object
+    
+
+      me.classes = 5 // update
+      me.hometown = 'Shanghai' // add a key that was not there before (change to yours)
+      me.foods.push('hot pot') // array methods work on an array inside an object
+      console.log(me)
+
+      // Reassigning a const throws an error. try/catch lets us read it
+      // without stopping the rest of the script.
+      try {
+        me = { name: 'someone else' }
+      } catch (error) {
+        console.log('Section 4 error:', error.message)
+      }
+      // Section 5: objects inside objects
+      const meWithPlace = {
+        name: 'Azelin',
+        place: {
+          city: 'New York',
+          borough: 'Brooklyn',
+        },
+      }
+
+      console.log(meWithPlace.place.city) // one chained expression
+
+    
+      try {
+        console.log(meWithPlace.plce.city)
+      } catch (error) {
+        console.log('Section 5 error:', error.message)
+      }
+      // Section 6: an array of objects
+      const albums = [
+        { title: 'Blonde', artist: 'Frank Ocean', year: 2016, owned: true },
+        { title: 'Currents', artist: 'Tame Impala', year: 2015, owned: true },
+        { title: 'Titanic Rising', artist: 'Weyes Blood', year: 2019, owned: false },
+        { title: 'SOS', artist: 'SZA', year: 2022, owned: false },
+      ]
+
+      console.log(albums[2].title) // the third item's title
+
+      for (let i = 0; i < albums.length; i++) {
+        console.log(`${albums[i].title} by ${albums[i].artist} (${albums[i].year})`)
+      }
+
+      function pickRandom(list) {
+        return list[Math.floor(Math.random() * list.length)]
+      }
+
+      const randomAlbum = pickRandom(albums)
+      console.log(randomAlbum.title, randomAlbum.year)
+
+      // Section 7: functions inside objects
+
+
+      const show = {
+        headliner: 'Bad Moon Rising',
+        venue: 'Brooklyn Steel',
+        price: 28.5,
+        capacity: 400,
+        ticketsSold: 388,
+
+        ticketsLeft() {
+          return this.capacity - this.ticketsSold
+        },
+
+        summary() {
+          return `${this.headliner}: ${this.ticketsLeft()} tickets left`
+        },
+      }
+
+      console.log(show.ticketsLeft()) 
+      console.log(show.summary()) 
+      show.ticketsSold = 400 
+      console.log(show.ticketsLeft()) 
+      console.log(show.summary())
+      show.ticketsSold = 388 
+
+      // Section 8: looping over an object's keys
+      console.log(Object.keys(show))
+      console.log(Object.values(show))
+      console.log(Object.entries(show))
+
+      const showKeys = Object.keys(show)
+
+      for (let i = 0; i < showKeys.length; i++) {
+        const k = showKeys[i]
+        console.log(`${k}: ${show[k]}`)
+      }
+
+      show.doors = 'Fri 13 Nov, 8pm' 
+      // Section 9: putting an object on the page
+     
+
+      const tonight = {
+        headliner: 'Bad Moon Rising',
+        venue: 'Brooklyn Steel',
+        price: 28.5,
+      }
+
+      function render() {
+        document.querySelector('#line-one').textContent = tonight.headliner
+        document.querySelector('#line-two').textContent = tonight.venue
+        document.querySelector('#line-three').textContent = `$${tonight.price.toFixed(2)}`
+      }
+
+      render()
+
+      tonight.price = 35 
+      render() 
+
+     
+      // Section 10: objects and local storage
+      localStorage.setItem('showBroken', tonight)
+      console.log(localStorage.getItem('showBroken')) 
+
+     
+      localStorage.setItem('show', JSON.stringify(tonight))
+      const saved = JSON.parse(localStorage.getItem('show'))
+      console.log(saved.headliner)
+
+  
+      localStorage.setItem('albums', JSON.stringify(albums))
+      const savedAlbums = JSON.parse(localStorage.getItem('albums'))
+      console.log(savedAlbums[0].title)
+
+
+      localStorage.setItem('showWithMethod', JSON.stringify(show))
+      const savedShow = JSON.parse(localStorage.getItem('showWithMethod'))
+      console.log(savedShow.headliner) // data is fine
+      try {
+        console.log(savedShow.ticketsLeft())
+      } catch (error) {
+        console.log('Section 10 error:', error.message) 
+      } 
+    </script>
+  </body>
+</html>

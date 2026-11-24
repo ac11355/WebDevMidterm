@@ -32,6 +32,12 @@
         <p class="fine-print" id="fine-print"></p>
       </section>
 
+     
+      <section class="block">
+        <h2>Details</h2>
+        <ul id="details"></ul>
+      </section>
+
       <section class="controls">
         <div class="qty">
           <span class="qty-label">Guests</span>
@@ -46,6 +52,8 @@
         </div>
 
         <button class="roll" id="roll" type="button">Bake a different pie</button>
+        <!-- NEW (Part B) -->
+        <button class="roll" id="clear" type="button">Clear saved pie</button>
       </section>
 
       <section class="block steps-wrap">
@@ -56,119 +64,242 @@
     </article>
 
     <script>
-   
+      /*
+        PART B ANSWER :
 
-      const crusts = [
-        'all-butter shortcrust',
-        'graham cracker crust',
-        'lard crust',
-        'chocolate cookie crust',
-        'oat and almond crust',
+        When the saved pie comes back from local storage, its DATA is all there
+        (filling, prepMinutes, the serveWith array, the details object) but its
+        methods are gone. Calling savedPie.totalMinutes() throws
+        "totalMinutes is not a function". That is because JSON only stores data,
+        and JSON.stringify silently drops functions.
+
+        To fix it, I would not trust the parsed copy: I look the pie up again in
+        my pies array by its filling name, so I get the original object with its
+        methods back (see loadSavedPie below).
+      */
+
+      /* ---------- DATA ---------- */
+
+     
+      const pies = [
+        {
+          filling: 'Sour cherry',
+          crust: 'all-butter shortcrust',
+          topping: 'a lattice top',
+          pieInches: 9,
+          costPerInch: 0.9,
+          crustCost: 3.5,
+          toppingCost: 2.75,
+          prepMinutes: 45,
+          bakeMinutes: 65,
+          budget: 40,
+          tagline: 'Rest it for an hour. Really.',
+          accent: '#b3263e',
+          isVegetarian: true,
+          serveWith: ['vanilla ice cream', 'whipped cream'],
+          details: {
+            'Oven temp': '200°C / 400°F',
+            Difficulty: 'Medium',
+            'Keeps for': '2 days',
+          },
+
+          totalMinutes() {
+            return this.prepMinutes + this.bakeMinutes
+          },
+          costPerPie() {
+            return this.pieInches * this.costPerInch + this.crustCost + this.toppingCost
+          },
+        },
+        {
+          filling: 'Brown butter apple',
+          crust: 'lard crust',
+          topping: 'a crumble topping',
+          pieInches: 10,
+          costPerInch: 0.7,
+          crustCost: 2.5,
+          toppingCost: 1.75,
+          prepMinutes: 30,
+          bakeMinutes: 50,
+          budget: 30,
+          tagline: 'Best served warm, with something cold.',
+          accent: '#a8541f',
+          isVegetarian: false,
+          serveWith: ['cheddar', 'cinnamon ice cream'],
+          details: {
+            'Oven temp': '190°C / 375°F',
+            Difficulty: 'Easy',
+            'Keeps for': '3 days',
+          },
+
+          totalMinutes() {
+            return this.prepMinutes + this.bakeMinutes
+          },
+          costPerPie() {
+            return this.pieInches * this.costPerInch + this.crustCost + this.toppingCost
+          },
+        },
+        {
+          filling: 'Pumpkin',
+          crust: 'graham cracker crust',
+          topping: 'whipped cream',
+          pieInches: 9,
+          costPerInch: 0.6,
+          crustCost: 2.5,
+          toppingCost: 1.75,
+          prepMinutes: 25,
+          bakeMinutes: 40,
+          budget: 20,
+          tagline: 'Leftovers are breakfast.',
+          accent: '#6b3f7a',
+          isVegetarian: true,
+          serveWith: ['hot coffee', 'maple syrup'],
+          details: {
+            'Oven temp': '175°C / 350°F',
+            Difficulty: 'Easy',
+            'Keeps for': '4 days',
+            'Chill time': '4 hours',
+          },
+
+          totalMinutes() {
+            return this.prepMinutes + this.bakeMinutes
+          },
+          costPerPie() {
+            return this.pieInches * this.costPerInch + this.crustCost + this.toppingCost
+          },
+        },
+        {
+          filling: 'Key lime',
+          crust: 'graham cracker crust',
+          topping: 'toasted meringue',
+          pieInches: 8,
+          costPerInch: 1,
+          crustCost: 2.5,
+          toppingCost: 2.75,
+          prepMinutes: 20,
+          bakeMinutes: 15,
+          budget: 25,
+          tagline: 'Cut it with a hot knife.',
+          accent: '#2f6f4e',
+          isVegetarian: true,
+          serveWith: ['fresh lime zest'],
+          details: {
+            'Oven temp': '175°C / 350°F',
+            Difficulty: 'Medium',
+            'Keeps for': '2 days',
+            'Chill time': '6 hours',
+          },
+
+          totalMinutes() {
+            return this.prepMinutes + this.bakeMinutes
+          },
+          costPerPie() {
+            return this.pieInches * this.costPerInch + this.crustCost + this.toppingCost
+          },
+        },
+        {
+          filling: 'Chocolate silk',
+          crust: 'chocolate cookie crust',
+          topping: 'whipped cream',
+          pieInches: 11,
+          costPerInch: 0.8,
+          crustCost: 3.5,
+          toppingCost: 1.75,
+          prepMinutes: 40,
+          bakeMinutes: 70,
+          budget: 45,
+          tagline: 'Nobody ever regretted a second slice.',
+          accent: '#3b4c9c',
+          isVegetarian: true,
+          serveWith: ['raspberries', 'espresso'],
+          details: {
+            'Oven temp': '160°C / 325°F',
+            Difficulty: 'Hard',
+            'Keeps for': '3 days',
+          },
+
+          totalMinutes() {
+            return this.prepMinutes + this.bakeMinutes
+          },
+          costPerPie() {
+            return this.pieInches * this.costPerInch + this.crustCost + this.toppingCost
+          },
+        },
       ]
 
-      const fillings = [
-        'Sour cherry',
-        'Brown butter apple',
-        'Pumpkin',
-        'Key lime',
-        'Blueberry lemon',
-        'Pecan',
-        'Peach and ginger',
-        'Chocolate silk',
-      ]
-
-      const toppings = [
-        'a lattice top',
-        'whipped cream',
-        'toasted meringue',
-        'a crumble topping',
-      ]
-
-      const accents = ['#b3263e', '#2f6f4e', '#3b4c9c', '#a8541f', '#6b3f7a', '#1f7a8c']
-
-      const taglines = [
-        'Best served warm, with something cold.',
-        'Rest it for an hour. Really.',
-        'Nobody ever regretted a second slice.',
-        'Blind bake the crust first.',
-        'Leftovers are breakfast.',
-        'Cut it with a hot knife.',
-        'Sugar is cheaper than regret.',
-      ]
-
-      /* ---------- HELPERS ---------- */
+      
 
       function pickRandom(list) {
         const index = Math.floor(Math.random() * list.length)
         return list[index]
       }
 
-      function randomBetween(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min
-      }
-
-
-      let filling
-      let crust
-      let topping
-      let pieInches
-      let costPerInch
-      let crustCost
-      let toppingCost
-      let prepMinutes
-      let bakeMinutes
-      let budget
-      let tagline
-      let accent
+    
+      let currentPie
 
       let guests = 6
       let eaterName = ''
 
-     
       const MIN_GUESTS = 1
       const MAX_GUESTS = 20
+      const STORAGE_KEY = 'savedPie'
+
+    
+
+      function rollNewPie() {
+        currentPie = pickRandom(pies)
+      }
+
+      function savePie() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentPie))
+      }
+
+     
+      function loadSavedPie() {
+        const raw = localStorage.getItem(STORAGE_KEY)
+
+        if (!raw) {
+          return false
+        }
+
+        try {
+          const saved = JSON.parse(raw)
+
+         
+          const original = pies.find(function (pie) {
+            return pie.filling === saved.filling
+          })
+
+          if (original) {
+            currentPie = original
+            return true
+          }
+        } catch (error) {
+          
+        }
+
+        return false
+      }
 
   
 
-      function rollNewPie() {
-        filling = pickRandom(fillings)
-        crust = pickRandom(crusts)
-        topping = pickRandom(toppings)
-
-        pieInches = randomBetween(8, 12)
-        prepMinutes = randomBetween(15, 60)
-        bakeMinutes = randomBetween(25, 75)
-        budget = randomBetween(15, 60)
-
-        costPerInch = randomBetween(5, 10) / 10 // $0.50 - $1.00
-        crustCost = randomBetween(2, 4) + 0.5
-        toppingCost = randomBetween(1, 3) + 0.75
-
-        tagline = pickRandom(taglines)
-        accent = pickRandom(accents)
-      }
-
-      
-
       function render() {
-
-        const slicesPerPie = pieInches >= 10 ? 10 : 8
+        const slicesPerPie = currentPie.pieInches >= 10 ? 10 : 8
 
         const piesNeeded = Math.ceil(guests / slicesPerPie)
 
-        const fillingCost = pieInches * costPerInch
-        const costPerPie = fillingCost + crustCost + toppingCost
+        const fillingCost = currentPie.pieInches * currentPie.costPerInch
+        const costPerPie = currentPie.costPerPie() // method
         const totalCost = costPerPie * piesNeeded
         const costPerPerson = totalCost / guests
-        const budgetUsed = Math.round((totalCost / budget) * 100)
-        const totalMinutes = prepMinutes + bakeMinutes
+        const budgetUsed = Math.round((totalCost / currentPie.budget) * 100)
+        const totalMinutes = currentPie.totalMinutes() // method
         const hoursPart = Math.floor(totalMinutes / 60)
         const minutesPart = totalMinutes % 60
 
-        const isOverBudget = totalCost > budget
+        const isOverBudget = totalCost > currentPie.budget
         const isLongBake = totalMinutes > 100
 
-        const gap = Math.abs(budget - totalCost)
+        const gap = Math.abs(currentPie.budget - totalCost)
 
         let status
 
@@ -180,24 +311,25 @@
           status = 'Quick one: ready before dinner'
         }
 
-        // ternaries for values
         const budgetLine = isOverBudget
           ? `Over budget by $${gap.toFixed(2)}`
           : `Under budget by $${gap.toFixed(2)}`
 
         const pieWord = piesNeeded === 1 ? 'pie' : 'pies'
         const kicker = eaterName === '' ? '' : `Made for ${eaterName}`
+        const diet = currentPie.isVegetarian ? 'vegetarian' : 'not vegetarian'
 
-        const sub = `${piesNeeded} ${pieWord} at ${pieInches} inches, for ${guests} guests, ready in ${hoursPart}h ${minutesPart}m`
+        const sub = `${piesNeeded} ${pieWord} at ${currentPie.pieInches} inches, for ${guests} guests, ready in ${hoursPart}h ${minutesPart}m`
 
-        const finePrint = `$${costPerPerson.toFixed(2)} per person · ${budgetUsed}% of your $${budget} budget · ${slicesPerPie} slices per pie`
+        const finePrint = `$${costPerPerson.toFixed(2)} per person · ${budgetUsed}% of your $${currentPie.budget} budget · ${slicesPerPie} slices per pie · ${diet}`
 
-        // for loop: the method list
+   
         const steps = [
-          `Make the ${crust} and chill it`,
-          `Mix the ${filling.toLowerCase()} filling`,
-          `Bake for ${bakeMinutes} minutes`,
-          `Finish with ${topping}`,
+          `Make the ${currentPie.crust} and chill it`,
+          `Mix the ${currentPie.filling.toLowerCase()} filling`,
+          `Bake for ${currentPie.bakeMinutes} minutes`,
+          `Finish with ${currentPie.topping}`,
+          `Serve with ${currentPie.serveWith.join(' or ')}`,
         ]
 
         let stepsHTML = ''
@@ -210,20 +342,29 @@
           stepsHTML += `<li class="${stripe}"><span class="num">${i + 1}</span>${steps[i]}${label}</li>`
         }
 
-        // ---- put it on the page ----
+        
+        const detailKeys = Object.keys(currentPie.details)
+        let detailsHTML = ''
+
+        for (let i = 0; i < detailKeys.length; i++) {
+          const key = detailKeys[i]
+          detailsHTML += `<li><strong>${key}:</strong> ${currentPie.details[key]}</li>`
+        }
+
+        
         document.querySelector('#kicker').textContent = kicker
-        document.querySelector('#name').textContent = `${filling} pie`
+        document.querySelector('#name').textContent = `${currentPie.filling} pie`
         document.querySelector('#sub').textContent = sub
         document.querySelector('#status').textContent = status
 
         document.querySelector('#size-line').textContent =
-          `${piesNeeded} × ${pieInches}" ${pieWord}`
+          `${piesNeeded} × ${currentPie.pieInches}" ${pieWord}`
         document.querySelector('#cost-line').textContent =
-          `Filling: ${pieInches}" × $${costPerInch.toFixed(2)}  —  $${fillingCost.toFixed(2)}`
+          `Filling: ${currentPie.pieInches}" × $${currentPie.costPerInch.toFixed(2)}  —  $${fillingCost.toFixed(2)}`
         document.querySelector('#crust-line').textContent =
-          `Crust  —  $${crustCost.toFixed(2)}`
+          `Crust  —  $${currentPie.crustCost.toFixed(2)}`
         document.querySelector('#topping-line').textContent =
-          `Topping  —  $${toppingCost.toFixed(2)}`
+          `Topping  —  $${currentPie.toppingCost.toFixed(2)}`
         document.querySelector('#budget-line').textContent = budgetLine
         document.querySelector('#budget-line').classList.toggle('over', isOverBudget)
 
@@ -231,16 +372,16 @@
         document.querySelector('#fine-print').textContent = finePrint
         document.querySelector('#count').textContent = guests
         document.querySelector('#steps').innerHTML = stepsHTML
-        document.querySelector('#tagline').textContent = tagline
+        document.querySelector('#details').innerHTML = detailsHTML
+        document.querySelector('#tagline').textContent = currentPie.tagline
 
-        document.body.style.setProperty('--accent', accent)
+        document.body.style.setProperty('--accent', currentPie.accent)
 
         document.querySelector('#minus').disabled = guests === MIN_GUESTS
         document.querySelector('#plus').disabled = guests === MAX_GUESTS
       }
 
-     
-
+      
       function handlePlus() {
         if (guests < MAX_GUESTS) {
           guests = guests + 1
@@ -262,6 +403,13 @@
 
       function handleRoll() {
         rollNewPie()
+        savePie()
+        render()
+      }
+
+      function handleClear() {
+        localStorage.removeItem(STORAGE_KEY)
+        rollNewPie()
         render()
       }
 
@@ -269,10 +417,13 @@
       document.querySelector('#minus').addEventListener('click', handleMinus)
       document.querySelector('#who').addEventListener('input', handleName)
       document.querySelector('#roll').addEventListener('click', handleRoll)
+      document.querySelector('#clear').addEventListener('click', handleClear)
 
-      /* ---------- GO ---------- */
+  
+      if (!loadSavedPie()) {
+        rollNewPie()
+      }
 
-      rollNewPie()
       render()
     </script>
   </body>

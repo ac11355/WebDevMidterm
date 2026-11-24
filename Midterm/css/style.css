@@ -103,6 +103,57 @@ nav li li a:focus-visible .preview {
 }
 
 
+/* Allow the container to use more screen width */
+.container {
+  width: 100%;
+  max-width: 1000px; /* Adjust this to cap how wide it gets */
+  margin: 0 auto;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Place Name & Email side-by-side stretching horizontally */
+.row {
+  display: flex;
+  flex-direction: row; /* Aligns items horizontally */
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+/* Make each input fill its container */
+.input-lg {
+  flex: 1; /* Causes inputs to stretch evenly */
+  width: 100%;
+  padding: 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Make the textarea stretch full width */
+.message-area {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.message {
+  width: 100%;
+  min-height: 140px;
+  padding: 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Optional: Stretch button full width or keep aligned to right */
+.button-bar {
+  display: flex;
+  width: 100%;
+}
+
+.btn-dark {
+  width: 100%; /* Change to auto if you don't want a full-width button */
+  padding: 0.8rem;
+}
+
+
 @media screen and (width < 768px) {
   .preview {
     display: none;
